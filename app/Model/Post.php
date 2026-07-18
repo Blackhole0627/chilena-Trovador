@@ -30,6 +30,7 @@ class Post extends Model
         'is_pinned',
         'notify_followers',
         'notifications_sent_at',
+        'comments_enabled',
     ];
 
     /**

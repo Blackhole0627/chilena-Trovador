@@ -107,10 +107,11 @@ class SettingsServiceProvider extends ServiceProvider
 
         $this->setupPwaConfig();
 
-        // Social logins overrides
-        if (getSetting('profiles.social_auth_facebook_client_id')) {
-            config(['services.facebook.client_id' => getSetting('profiles.social_auth_facebook_client_id')]);
-            config(['services.facebook.client_secret' => getSetting('profiles.social_auth_facebook_secret')]);
+        // Social logins overrides — T9: prefer .env, fall back to admin settings.
+        $fbClientId = env('FACEBOOK_CLIENT_ID', getSetting('profiles.social_auth_facebook_client_id'));
+        if ($fbClientId) {
+            config(['services.facebook.client_id' => $fbClientId]);
+            config(['services.facebook.client_secret' => env('FACEBOOK_CLIENT_SECRET', getSetting('profiles.social_auth_facebook_secret'))]);
             config(['services.facebook.redirect' => rtrim(getSetting('site.app_url'), '/').'/socialAuth/facebook/callback']);
         }
         if (getSetting('profiles.social_auth_twitter_client_id')) {
@@ -118,9 +119,11 @@ class SettingsServiceProvider extends ServiceProvider
             config(['services.twitter.client_secret' => getSetting('profiles.social_auth_twitter_secret')]);
             config(['services.twitter.redirect' => rtrim(getSetting('site.app_url'), '/').'/socialAuth/twitter/callback']);
         }
-        if (getSetting('profiles.social_auth_google_client_id')) {
-            config(['services.google.client_id' => getSetting('profiles.social_auth_google_client_id')]);
-            config(['services.google.client_secret' => getSetting('profiles.social_auth_google_secret')]);
+        // T9: prefer .env, fall back to admin settings.
+        $googleClientId = env('GOOGLE_CLIENT_ID', getSetting('profiles.social_auth_google_client_id'));
+        if ($googleClientId) {
+            config(['services.google.client_id' => $googleClientId]);
+            config(['services.google.client_secret' => env('GOOGLE_CLIENT_SECRET', getSetting('profiles.social_auth_google_secret'))]);
             config(['services.google.redirect' => rtrim(getSetting('site.app_url'), '/').'/socialAuth/google/callback']);
         }
 

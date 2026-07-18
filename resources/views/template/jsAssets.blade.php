@@ -10,6 +10,7 @@
         '/libs/xss/dist/xss.min.js',
         '/libs/pusher-js-auth/lib/pusher-auth.js',
         '/js/Websockets.js',
+        '/js/trovador/post-countdown.js',
     ],
     (isset($additionalJs) ? $additionalJs : []),
     GenericHelper::getGlobalAdditionalJS(),

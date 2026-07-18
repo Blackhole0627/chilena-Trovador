@@ -51,8 +51,7 @@ class JavascriptVariables
             $jsData['max_ppv_message_price'] = getSetting('payments.max_ppv_message_price') ?? 500;
             $jsData['stripeRecurringDisabled'] = getSetting('payments.stripe_recurring_disabled');
             $jsData['paypalRecurringDisabled'] = getSetting('payments.paypal_recurring_disabled');
-            $jsData['ccBillRecurringDisabled'] = getSetting('payments.ccbill_recurring_disabled');
-            $jsData['verotelRecurringDisabled'] = getSetting('payments.verotel_recurring_disabled');
+            // T2 — CCBill/Verotel removed
             $jsData['localWalletRecurringDisabled'] = getSetting('payments.disable_local_wallet_for_subscriptions');
             $jsData['age_gate_driver'] = $ageGate->driver();
             $jsData['enable_age_verification_dialog'] = $ageGate->isBuiltIn();
