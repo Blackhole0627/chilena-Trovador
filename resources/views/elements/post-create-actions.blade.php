@@ -57,6 +57,22 @@
         </div>
     @endif
 
+    {{-- T7 — allow/disallow comments on this post --}}
+    <div class="mt-1 ml-0 ml-md-2">
+        <span
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{__('Allow comments on this post')}}"
+            class="h-pill h-pill-primary post-comments-toggle-button"
+            onclick="PostCreate.toggleComments()"
+        >
+            <div class="post-comments-toggle-icon">
+                @include('elements.icon',['icon'=>'chatbubble-outline','variant'=>'medium','centered'=>true, 'classes' => 'mr-1'])
+            </div>
+            <span class="d-none d-md-block">{{__("Comments")}}</span>
+        </span>
+    </div>
+
     @if(getSetting('ai.text_enabled'))
         <div class="mt-1 ml-0 ml-md-2">
         <span

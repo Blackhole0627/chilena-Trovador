@@ -18,9 +18,22 @@ var PostCreate = {
     postPrice : 0,
     isSavingRedirect: false,
     postNotifications: false,
+    commentsEnabled: true, // T7
     postReleaseDate: null,
     postExpireDate: null,
     pollAnswers: [],
+
+    /**
+     * T7 — toggles whether comments are allowed on this post.
+     */
+    toggleComments: function(){
+        PostCreate.commentsEnabled = !PostCreate.commentsEnabled;
+        var name = PostCreate.commentsEnabled ? 'chatbubble-outline' : 'chatbubble-ellipses-outline';
+        var cls = PostCreate.commentsEnabled ? '' : 'text-muted';
+        $('.post-comments-toggle-icon').html(
+            '<div class="d-flex justify-content-center align-items-center mr-1 '+cls+'"><ion-icon class="icon-medium" name="'+name+'"></ion-icon></div>'
+        );
+    },
 
     /**
      * Toggles post notification state
@@ -197,6 +210,7 @@ var PostCreate = {
             'postNotifications' : PostCreate.postNotifications,
             'postReleaseDate': PostCreate.postReleaseDate,
             'postExpireDate': PostCreate.postExpireDate,
+            'commentsEnabled': PostCreate.commentsEnabled ? 'true' : 'false', // T7
             'pollAnswers' : PostCreate.pollAnswers
         };
         if(type === 'create'){
