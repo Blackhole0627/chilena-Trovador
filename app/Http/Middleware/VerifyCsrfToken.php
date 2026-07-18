@@ -19,20 +19,23 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
+        // Active gateways for Trovador
         'payment/paypalStatusUpdate',
-        'payment/stripeStatusUpdate',
-        'payment/yookassaStatusUpdate',
-        'payment/mollieStatusUpdate',
-        'payment/flutterwaveStatusUpdate',
-        'payment/coingateStatusUpdate',
-        'payment/xenditStatusUpdate',
-        'payment/paddleStatusUpdate',
-        'payment/cryptocomStatusUpdate',
-        'payment/nowPaymentsStatusUpdate',
-        'payment/paystackPaymentStatusUpdate',
         'payment/mercadoPaymentStatusUpdate',
-        'payment/razorPayPaymentStatusUpdate',
         'transcoding/coconut/update',
-        'payment/stripeConnectStatusUpdate',
+        // Unused gateways — left commented in case we enable them later
+        // 'payment/stripeStatusUpdate',
+        // 'payment/yookassaStatusUpdate',
+        // 'payment/mollieStatusUpdate',
+        // 'payment/flutterwaveStatusUpdate',
+        // 'payment/coingateStatusUpdate',
+        // 'payment/xenditStatusUpdate',
+        // 'payment/paddleStatusUpdate',
+        // 'payment/cryptocomStatusUpdate',
+        // 'payment/nowPaymentsStatusUpdate',
+        // 'payment/paystackPaymentStatusUpdate',
+        // 'payment/razorPayPaymentStatusUpdate',
+        // 'payment/stripeConnectStatusUpdate',
+        // CCBill and Verotel removed entirely (adult processors)
     ];
 }

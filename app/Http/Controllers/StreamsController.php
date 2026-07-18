@@ -345,6 +345,11 @@ class StreamsController extends Controller
                 if (str_starts_with($channel, 'presence-')) {
                     $auth = $pusher->presence_auth($channel, $request->input('socket_id'), (string) auth()->id(), []);
                 } elseif (str_starts_with($channel, 'private-')) {
+                    // Security: verify real stream access before signing the channel.
+                    if (!$this->viewerCanAccessStreamChannel($channel)) {
+                        $out[$channel] = ['status' => 403, 'data' => ['errors' => [__('Not authorized')]]];
+                        continue;
+                    }
                     $auth = $pusher->socket_auth($channel, $request->input('socket_id'));
                 } else {
                     $auth = json_encode(['auth' => true]); // public channel
@@ -359,6 +364,19 @@ class StreamsController extends Controller
                     'errors' => [__($exception->getMessage())],
                 ], ]);
         }
+    }
+
+    /**
+     * Security: only sign a stream chat channel if the viewer actually has
+     * access to that stream. Any other private channel is rejected.
+     */
+    private function viewerCanAccessStreamChannel(string $channel): bool
+    {
+        if (preg_match('/stream-chat-channel-(\d+)$/', $channel, $m)) {
+            $stream = Stream::find((int) $m[1]);
+            return $stream ? StreamsServiceProvider::hasViewerAccess($stream) === true : false;
+        }
+        return false;
     }
 
     /**

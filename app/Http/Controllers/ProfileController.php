@@ -65,7 +65,7 @@ class ProfileController extends Controller
         $startPage = PostsHelperServiceProvider::getFeedStartPage(PostsHelperServiceProvider::getPrevPage($request));
         $posts = PostsHelperServiceProvider::getUserPosts($this->user->id, false, $startPage, $postsFilter, $this->hasSub, $profileCompactMediaView);
         PostsHelperServiceProvider::shouldDeletePaginationCookie($request);
-        $posts = $posts->appends($_GET);
+        $posts = $posts->appends($request->query());
         $filterTypeCounts = PostsHelperServiceProvider::getUserMediaTypesCount($this->user->id);
         $filterTypeCounts['reels'] = getSetting('reels.reels_enabled')
             ? ReelsServiceProvider::profileCount($request->user(), $this->user)
