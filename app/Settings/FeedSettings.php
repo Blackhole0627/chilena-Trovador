@@ -64,6 +64,8 @@ class FeedSettings extends Settings
 
     public ?int $popular_hashtags_days = 14;
 
+    public bool $featured_highlights_enabled = false; // Trovador F4
+
     public static function group(): string
     {
         return 'feed';

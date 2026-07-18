@@ -54,6 +54,10 @@ class ManageFeedSettings extends SettingsPage
                             Toggle::make('allow_post_polls')
                                 ->helperText('When enabled, users can add polls to their posts.'),
 
+                            Toggle::make('featured_highlights_enabled')
+                                ->label('Featured highlights (Destacados)')
+                                ->helperText('Trovador — show the Destacados widget (Reels/Fotos/Audio/Perfiles) at the top of the feed.'),
+
                             Toggle::make('enable_post_description_excerpts')
                                 ->helperText('If enabled, long post descriptions will be truncated with a \'Show more\' link.'),
 

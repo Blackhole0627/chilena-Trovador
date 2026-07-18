@@ -11,6 +11,7 @@
                             <div class="blob red ml-3"></div>
                             </span>
         @endif
+        @include('elements.streak-badge', ['user' => $user]) {{-- F3 --}}
     </h5>
     <h6 class="text-muted"><span class="text-bold"><span>@</span>{{$user->username}}</span>
         @if(getSetting('profiles.show_online_users_indicator'))
@@ -57,6 +58,19 @@
             {{__('No description available.')}}
         @endif
     </div>
+
+    {{-- F5 — profile welcome audio note (no autoplay) --}}
+    @if(!empty($user->welcome_audio))
+        <div class="mt-2 welcome-audio-holder">
+            <audio id="welcome-audio-player" class="d-none" preload="none"
+                   src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($user->welcome_audio) }}"></audio>
+            <span class="h-pill h-pill-primary rounded pointer-cursor"
+                  onclick="var a=document.getElementById('welcome-audio-player'); if(a.paused){a.play();}else{a.pause();}">
+                @include('elements.icon',['icon'=>'play-circle-outline','centered'=>false,'classes'=>'mr-1'])
+                {{__('Escuchar presentación')}}
+            </span>
+        </div>
+    @endif
     @if($user->bio && !getSetting('profiles.disable_profile_bio_excerpt'))
         <span class="text-primary pointer-cursor show-more-actions d-none" onclick="Profile.toggleFullDescription()">
                             <span class="label-more">{{__('More info')}}</span>

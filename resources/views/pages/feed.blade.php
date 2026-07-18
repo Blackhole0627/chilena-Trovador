@@ -68,6 +68,10 @@
 
                 <div class="{{getSetting('stories.stories_enabled') ? '' : 'mobile-search-content-offset'}}">
                     @include('elements.message-alert',['classes'=>'pt-4 pb-4 px-2'])
+                    {{-- F4 — Destacados widget (admin-toggle feed.featured_highlights_enabled) --}}
+                    @if(\App\Helpers\FeaturedContentHelper::enabled())
+                        @include('elements.feed.widgets.featured-highlights')
+                    @endif
                     @include('elements.feed.posts-load-more')
                     <div class="feed-box mt-0 pt-4 posts-wrapper">
                         @include('elements.feed.posts-wrapper',[

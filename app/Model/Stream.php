@@ -15,6 +15,8 @@ class Stream extends Model
     /**
      * Streaming is currently playing.
      */
+    public const SCHEDULED_STATUS = 'scheduled'; // Trovador F2
+
     public const IN_PROGRESS_STATUS = 'in-progress';
 
     /**
@@ -34,6 +36,7 @@ class Stream extends Model
      */
     protected $fillable = [
         'driver', 'user_id', 'status', 'name', 'slug', 'poster', 'pushr_id', 'hls_link', 'vod_link', 'rtmp_server', 'rtmp_key', 'price', 'requires_subscription', 'sent_expiring_reminder', 'is_public', 'settings',
+        'scheduled_at', 'scheduled_notified_24h', 'scheduled_notified_15m', // Trovador F2
     ];
 
     /**
@@ -51,6 +54,7 @@ class Stream extends Model
      */
     protected $casts = [
         'ended_at' => 'datetime',
+        'scheduled_at' => 'datetime', // Trovador F2
         'settings' => 'array',
     ];
 

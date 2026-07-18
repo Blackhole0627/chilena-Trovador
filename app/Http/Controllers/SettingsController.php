@@ -625,6 +625,28 @@ class SettingsController extends Controller
 
         $settings['connections'] = $this->buildConnectionsFromSocialLinks($socialLinks);
 
+        // F5 — optional welcome audio note (max ~60s enforced client-side; here we
+        // validate mime + size). Stored on the public disk like avatars.
+        $welcomeAudioPath = $user->welcome_audio;
+        if ($request->hasFile('welcome_audio')) {
+            $validatedAudio = \Illuminate\Support\Facades\Validator::make($request->all(), [
+                'welcome_audio' => ['file', 'mimetypes:audio/mpeg,audio/mp4,audio/aac,audio/wav,audio/webm,audio/ogg', 'max:10240'],
+            ]);
+            if ($validatedAudio->fails()) {
+                return back()->withErrors($validatedAudio);
+            }
+            // Remove the previous one if present.
+            if ($welcomeAudioPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($welcomeAudioPath)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($welcomeAudioPath);
+            }
+            $welcomeAudioPath = $request->file('welcome_audio')->store('welcome-audio', 'public');
+        } elseif ($request->get('remove_welcome_audio') === 'true') {
+            if ($welcomeAudioPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($welcomeAudioPath)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($welcomeAudioPath);
+            }
+            $welcomeAudioPath = null;
+        }
+
         // Save profile fields
         $user->update([
             'name' => $request->get('name'),
@@ -636,6 +658,7 @@ class SettingsController extends Controller
             'gender_id' => $request->get('gender'),
             'gender_pronoun' => $request->get('pronoun'),
             'country_id' => $request->get('country'),
+            'welcome_audio' => $welcomeAudioPath,
             'settings' => $settings,
         ]);
 
