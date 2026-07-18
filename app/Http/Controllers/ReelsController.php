@@ -7,6 +7,7 @@ use App\Http\Requests\StoreReelRequest;
 use App\Model\Attachment;
 use App\Model\Reaction;
 use App\Model\Reel;
+use App\Events\NewReelCommentEvent;
 use App\Model\ReelComment;
 use App\Model\ReelView;
 use App\Model\Sound;
@@ -302,10 +303,15 @@ class ReelsController extends Controller
         ]);
         $comment->loadCount('reactions');
 
+        $payload = ReelsServiceProvider::commentPayload($comment, $request->user(), $reel);
+
+        // Broadcast to other viewers TikTok-Live style (T6).
+        broadcast(new NewReelCommentEvent((int) $reel->id, $payload, (int) $request->user()->id))->toOthers();
+
         return response()->json([
             'success' => true,
             'comment_id' => (int) $comment->id,
-            'comment' => ReelsServiceProvider::commentPayload($comment, $request->user(), $reel),
+            'comment' => $payload,
             'comments' => ReelComment::where('reel_id', (int) $reel->id)->count(),
         ]);
     }

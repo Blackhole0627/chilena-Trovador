@@ -13,6 +13,8 @@ use App\Model\Poll;
 use App\Model\PollAnswer;
 use App\Model\PollUserAnswer;
 use App\Model\Post;
+use App\Events\NewPostCommentEvent;
+use Pusher\Pusher;
 use App\Model\PostComment;
 use App\Model\Reaction;
 use App\Model\UserBookmark;
@@ -222,6 +224,7 @@ class PostsController extends Controller
                     'release_date' => $releaseDate->toDateTimeString(),
                     'expire_date' => $expireDate?->toDateTimeString(),
                     'notify_followers' => $postNotifications,
+                    'comments_enabled' => $request->get('commentsEnabled', 'true') !== 'false', // T7
                 ])->id;
 
                 if ($pollAnswers) {
@@ -243,6 +246,7 @@ class PostsController extends Controller
                         'price' => $request->get('price'),
                         'release_date' => $releaseDate->toDateTimeString(),
                         'expire_date' => $expireDate?->toDateTimeString(),
+                        'comments_enabled' => $request->get('commentsEnabled', 'true') !== 'false', // T7
                     ]);
 
                     $postID = $post->id;
@@ -440,6 +444,11 @@ class PostsController extends Controller
                 return response()->json(['success' => false, 'errors' => [__('This user has blocked you')], 'message'=> __('This user has blocked you')], 403);
             }
 
+            // T7 — reject comments when the creator disabled them (defense-in-depth).
+            if (!($post->comments_enabled ?? true)) {
+                return response()->json(['success' => false, 'errors' => [__('Comments are disabled for this post')], 'message' => __('Comments are disabled for this post')], 403);
+            }
+
             if ($this->validateUserAccessForPost($post)) {
                 $replyTarget = null;
                 $parentID = null;
@@ -481,24 +490,20 @@ class PostsController extends Controller
                     $comment->setRelation('replies', collect());
                 }
 
+                // Render once, return to the author and broadcast to other viewers (T6).
+                $renderedComment = View::make('elements.feed.post-comment')
+                    ->with('comment', $comment)
+                    ->with('isFirst', $wasFirst)
+                    ->render();
+
+                broadcast(new NewPostCommentEvent($postID, $renderedComment, Auth::user()->id))->toOthers();
+
+                // Trovador — flat comments (TikTok-Live style). We keep the
+                // v11.2.0 parent_id columns but never render reply threads.
                 return response()->json([
                     'success' => true,
-                    'data' => $parentID
-                        ? View::make('elements.feed.post-comment', [
-                            'comment' => $comment,
-                            'isFirst' => false,
-                            'isReply' => true,
-                        ])->render()
-                        : View::make('elements.feed.post-comment-thread', [
-                            'comment' => $comment,
-                            'isFirst' => $wasFirst,
-                        ])->render(),
-                    'is_reply' => (bool) $parentID,
-                    'parent_id' => $parentID,
+                    'data' => $renderedComment,
                     'comments' => PostComment::where('post_id', $postID)->count(),
-                    'thread_replies' => $parentID
-                        ? PostComment::where('parent_id', $parentID)->count()
-                        : 0,
                 ]);
             }
             else{
@@ -813,6 +818,42 @@ class PostsController extends Controller
             || (!ProfileMonetizationServiceProvider::userHasPaidProfile($post->user) && ListsHelperServiceProvider::loggedUserIsFollowingUser($post->user->id))
             // check if logged user is admin
             || Auth::user()->role_id === 1;
+    }
+
+    /**
+     * Trovador — T10. Authorizes subscription to a post comment channel
+     * (post-comment-channel-{postId}) ONLY after verifying the user actually
+     * has access to that post. Unlike the generic stream authorizer, this
+     * never blindly signs a private channel.
+     */
+    public function authorizePostChannel(Request $request)
+    {
+        $pusher = new Pusher(
+            config('broadcasting.connections.pusher.key'),
+            config('broadcasting.connections.pusher.secret'),
+            config('broadcasting.connections.pusher.app_id'),
+            (array) config('broadcasting.connections.pusher.options', [])
+        );
+
+        $out = [];
+        foreach ((array) $request->input('channel_name') as $channel) {
+            // Only handle our post comment channels; reject anything else.
+            if (!preg_match('/post-comment-channel-(\d+)$/', $channel, $m)) {
+                $out[$channel] = ['status' => 403];
+                continue;
+            }
+
+            $post = Post::find((int) $m[1]);
+            if (!$post || !$this->validateUserAccessForPost($post)) {
+                $out[$channel] = ['status' => 403];
+                continue;
+            }
+
+            $auth = $pusher->socket_auth($channel, $request->input('socket_id'));
+            $out[$channel] = ['status' => 200, 'data' => json_decode($auth, true)];
+        }
+
+        return response()->json($out);
     }
 
     /**

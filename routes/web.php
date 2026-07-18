@@ -190,10 +190,10 @@ Route::group(['middleware' => ['auth', 'verified', '2fa']], function () {
         Route::get('/paddle/status', ['uses' => 'PaymentsController@checkAndUpdatePaddleTransaction', 'as'   => 'checkPaddlePaymentStatus']);
         Route::get('/cryptocom/status', ['uses' => 'PaymentsController@checkAndUpdateCryptoComTransaction', 'as'   => 'checkCryptoComPaymentStatus']);
         Route::get('/nowpayments/status', ['uses' => 'PaymentsController@checkAndUpdateNowPaymentsTransaction', 'as'   => 'checkNowPaymentStatus']);
-        Route::get('/ccbill/status', ['uses' => 'PaymentsController@processCCBillTransaction', 'as'   => 'checkCCBillPaymentStatus']);
+        // T2 — CCBill removed (adult payment processor)
         Route::get('/paystack/status', ['uses' => 'PaymentsController@verifyPaystackTransaction', 'as'   => 'checkPaystackPaymentStatus']);
         Route::get('/mercado/status', ['uses' => 'PaymentsController@verifyMercadoTransaction', 'as'   => 'checkMercadoPaymentStatus']);
-        Route::get('/verotel/status', ['uses' => 'PaymentsController@verifyVerotelTransaction', 'as'   => 'checkVerotelPaymentStatus']);
+        // T2 — Verotel removed (adult payment processor)
         Route::get('/razorpay/status', ['uses' => 'PaymentsController@verifyRazorPayTransaction', 'as'   => 'checkRazorPayPaymentStatus']);
         Route::post('/taxes/quote', ['uses' => 'PaymentsController@quoteTaxes', 'as'   => 'quoteTaxes']);
     });
@@ -234,6 +234,8 @@ Route::group(['middleware' => ['auth', 'verified', '2fa']], function () {
         Route::get('/{post_id}/{username}', ['uses' => 'PostsController@getPost', 'as'   => 'get']);
         Route::get('/comments', ['uses' => 'PostsController@getPostComments', 'as'   => 'get.comments']);
         Route::post('/comments/add', ['uses' => 'PostsController@addNewComment', 'as'   => 'add.comments'])->middleware('feature.throttle:posts_comments_add');
+        // Trovador T10 — access-checked websocket auth for live post comments
+        Route::post('/authorizePostChannel', ['uses' => 'PostsController@authorizePostChannel', 'as'   => 'authorizePostChannel']);
         Route::post('/comments/edit', ['uses' => 'PostsController@editComment', 'as'   => 'edit.comments']);
         Route::delete('/comments/delete', ['uses' => 'PostsController@deleteComment', 'as'   => 'delete.comments']);
 
@@ -369,10 +371,7 @@ Route::post('payment/nowPaymentsStatusUpdate', [
     'uses' => 'PaymentsController@nowPaymentsHook',
 ]);
 
-Route::post('payment/ccBillPaymentStatusUpdate', [
-    'as'   => 'ccBill.payment.update',
-    'uses' => 'PaymentsController@ccBillHook',
-]);
+// T2 — CCBill webhook removed
 
 Route::post('payment/paystackPaymentStatusUpdate', [
     'as'   => 'paystack.payment.update',
@@ -384,10 +383,7 @@ Route::post('payment/mercadoPaymentStatusUpdate', [
     'uses' => 'PaymentsController@mercadoHook',
 ]);
 
-Route::get('payment/verotelPaymentStatusUpdate', [
-    'as'   => 'verotel.payment.update',
-    'uses' => 'PaymentsController@verotelHook',
-]);
+// T2 — Verotel webhook removed
 
 Route::post('payment/razorPayPaymentStatusUpdate', [
     'as'   => 'razorpay.payment.update',

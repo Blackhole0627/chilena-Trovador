@@ -181,6 +181,28 @@ var Websockets = {
             launchToast('success', trans(toastTitle), filterXSS(data.message));
         });
 
+        // Trovador T8 — real-time Rekognition moderation result for own uploads.
+        channel.bind('attachment-moderated', function (data) {
+            var type = 'success';
+            if (data.status === 'pending_review') {
+                type = 'warning';
+            } else if (data.status === 'rejected' || data.status === 'failed') {
+                type = 'danger';
+            }
+            launchToast(type, trans('Moderación de contenido'), filterXSS(data.message));
+
+            // If a rejected/failed attachment is still shown in an open uploader,
+            // drop its preview so the user cannot publish it.
+            if ((data.status === 'rejected' || data.status === 'failed') &&
+                typeof FileUpload !== 'undefined' && FileUpload.myDropzone) {
+                FileUpload.myDropzone.files.forEach(function (file) {
+                    if (file.upload && String(file.upload.attachmentID) === String(data.attachmentId)) {
+                        FileUpload.myDropzone.removeFile(file);
+                    }
+                });
+            }
+        });
+
         channel.bind('messenger-actions', function (data) {
             if (data.type === 'new-messenger-conversation' && location.indexOf('my/messenger') >= 0) {
                 messenger.fetchContacts();

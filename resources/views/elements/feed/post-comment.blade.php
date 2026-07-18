@@ -91,7 +91,7 @@
                     <span class="comment-reactions-label-count">{{count($comment->reactions)}}</span>
                     <span class="comment-reactions-label">{{trans_choice('likes',count($comment->reactions))}}</span>
                 </div>
-                <div class="ml-2"><a href="javascript:void(0)" onclick="Post.startCommentReply({{$comment->post->id}}, {{$comment->id}}, '{{$comment->author->username}}')" class="text-muted">{{__('Reply')}}</a></div>
+                {{-- Trovador: flat comments (TikTok-Live style) — reply threads disabled --}}
             </div>
         </div>
     </div>
