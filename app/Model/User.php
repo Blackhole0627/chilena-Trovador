@@ -40,7 +40,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
      * @var list<string>
      */
     protected $fillable = [
-        'name', 'email', 'role_id', 'password', 'username', 'bio', 'birthdate', 'location', 'website', 'avatar', 'cover', 'settings',
+        'name', 'email', 'role_id', 'password', 'username', 'bio', 'birthdate', 'location', 'website', 'avatar', 'cover', 'welcome_audio', 'settings',
         'billing_address', 'first_name', 'last_name', 'profile_access_price',
         'gender_id', 'gender_pronoun',
         'profile_access_price_6_months',
@@ -51,6 +51,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'email_verified_at', 'paid_profile',
         'auth_provider', 'auth_provider_id', 'enable_2fa', 'enable_geoblocking', 'open_profile', 'referral_code',
         'last_active_at',
+        'streak_days', 'streak_badge', 'streak_last_day',
         'last_ip',
         'identity_verified_at',
         'stripe_account_id',

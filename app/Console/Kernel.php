@@ -22,6 +22,8 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\CronProcessExpiringStreams',
         'App\Console\Commands\CronSendDuePostNotifications',
         'App\Console\Commands\CronProcessUserDeletions',
+        'App\Console\Commands\CronCheckStreaks',
+        'App\Console\Commands\CronSendStreamNotifications',
     ];
 
     /**
@@ -42,6 +44,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('cron:end_streams')->everyFiveMinutes();
         $schedule->command('cron:send_due_post_notifications')->hourly()->withoutOverlapping();
         $schedule->command('cron:process_user_deletions')->hourly()->withoutOverlapping();
+        $schedule->command('cron:check_streaks')->dailyAt('00:15')->withoutOverlapping();
+        $schedule->command('cron:send_stream_notifications')->everyFiveMinutes()->withoutOverlapping();
         $schedule->command('generateSitemap')->daily();
     }
 

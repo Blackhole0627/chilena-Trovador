@@ -15,6 +15,7 @@
                                 @include('elements.icon',['icon'=>'verified','centered'=>true,'classes'=>'ml-1', 'variant' => 'small'])
                             </span>
                             @endif
+                            @include('elements.streak-badge', ['user' => $post->user]) {{-- F3 --}}
                         </div>
                         <div><a href="{{route('profile',['username'=>$post->user->username])}}" class="text-dark-r text-hover text-muted"><span>@</span>{{$post->user->username}}</a></div>
                     </div>
@@ -110,6 +111,23 @@
             </div>
         </div>
     </div>
+
+    {{-- F1 — Trovador expiry / release countdown badge (below creator name, above content) --}}
+    @php
+        $tvRelease = $post->release_date ? \Carbon\Carbon::parse($post->release_date) : null;
+        $tvExpire  = $post->expire_date ? \Carbon\Carbon::parse($post->expire_date) : null;
+        $tvShowRelease = $tvRelease && $tvRelease->isFuture();
+        $tvShowExpire  = $tvExpire && $tvExpire->isFuture() && $tvExpire->diffInHours(now()) < 72;
+    @endphp
+    @if($tvShowRelease || $tvShowExpire)
+        <div class="px-3 pt-1">
+            <span class="h-pill rounded small trovador-countdown"
+                  data-release="{{ $tvShowRelease ? $tvRelease->timestamp : '' }}"
+                  data-expire="{{ $tvShowExpire ? $tvExpire->timestamp : '' }}"
+                  data-release-label="{{ __('Se publica en') }}"
+                  data-expire-label="{{ __('Desaparece en') }}"></span>
+        </div>
+    @endif
 
     {{--    Post text --}}
     <div class="post-content mt-3 {{count($post->attachments) ? "mb-3" : ""}} pl-3 pr-3">
@@ -208,8 +226,8 @@
                         @include('elements.icon',['icon'=>'heart-outline', 'variant' => 'medium'])
                     </div>
                 @endif
-                {{-- Comments --}}
-                @if(Route::currentRouteName() != 'posts.get')
+                {{-- Comments (T7: hidden entirely when the creator disabled comments) --}}
+                @if(($post->comments_enabled ?? true) && Route::currentRouteName() != 'posts.get')
                     @if($post->isSubbed || (Auth::check() && \App\Providers\ProfileMonetizationServiceProvider::userHasOpenProfile($post->user)))
                         <div class="h-pill h-pill-primary mr-1 rounded" data-toggle="tooltip" data-placement="top" title="{{__('Show comments')}}" onClick="Post.showPostComments({{$post->id}},6)">
                             @include('elements.icon',['icon'=>'chatbubble-outline', 'variant' => 'medium'])
