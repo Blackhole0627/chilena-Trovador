@@ -52,6 +52,15 @@ class AISettings extends Settings
 
     public ?string $xai_base_url = 'https://api.x.ai/v1';
 
+    // Trovador T8 — AWS Rekognition visual moderation (admin-configurable)
+    public bool $moderation_enabled = true;
+
+    public float $moderation_reject_threshold = 85.0;
+
+    public float $moderation_review_threshold = 70.0;
+
+    public bool $moderation_notify_user = true;
+
     public static function group(): string
     {
         return 'ai';

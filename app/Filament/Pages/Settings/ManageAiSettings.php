@@ -168,6 +168,39 @@ class ManageAiSettings extends SettingsPage
                                 ->columnSpanFull(),
 
                         ]),
+
+                    // Trovador T8 — AWS Rekognition visual moderation
+                    Tabs\Tab::make('Content Moderation')
+                        ->columns(2)
+                        ->schema([
+                            Toggle::make('moderation_enabled')
+                                ->label('Enable AWS Rekognition moderation')
+                                ->helperText('Scan uploaded images and videos before publishing.')
+                                ->columnSpanFull(),
+
+                            Toggle::make('moderation_notify_user')
+                                ->label('Notify the user of the result')
+                                ->helperText('Send a real-time notification on approve / review / reject.')
+                                ->columnSpanFull(),
+
+                            TextInput::make('moderation_reject_threshold')
+                                ->label('Auto-reject threshold (%)')
+                                ->numeric()
+                                ->minValue(0)
+                                ->maxValue(100)
+                                ->step(1)
+                                ->required()
+                                ->helperText('At or above this confidence the upload is rejected and hidden.'),
+
+                            TextInput::make('moderation_review_threshold')
+                                ->label('Manual-review threshold (%)')
+                                ->numeric()
+                                ->minValue(0)
+                                ->maxValue(100)
+                                ->step(1)
+                                ->required()
+                                ->helperText('Between this and the reject threshold, content is flagged for human review. Below it, auto-approved.'),
+                        ]),
                 ]),
         ]);
     }

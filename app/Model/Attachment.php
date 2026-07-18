@@ -30,6 +30,8 @@ class Attachment extends Model
         'type', 'id', 'driver',
         'payment_request_id', 'message_id', 'message_template_id', 'coconut_id', 'story_id', 'reel_id',
         'has_thumbnail', 'has_blurred_preview', 'blurred_filename', 'length',
+        // Trovador T8 — Rekognition moderation state
+        'moderation_status', 'moderation_score', 'moderation_labels', 'moderation_attempts', 'moderated_at',
     ];
 
     protected $appends = ['attachmentType', 'path', 'thumbnail'];
@@ -49,6 +51,10 @@ class Attachment extends Model
      */
     protected $casts = [
         'id' => 'string',
+        // Trovador T8
+        'moderation_labels' => 'array',
+        'moderation_score'  => 'float',
+        'moderated_at'      => 'datetime',
     ];
 
     /*

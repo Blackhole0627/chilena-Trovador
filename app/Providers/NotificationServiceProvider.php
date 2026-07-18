@@ -522,6 +522,41 @@ class NotificationServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Trovador T8 — publish an arbitrary real-time event to a user's private
+     * channel (named by username), reusing the same Pusher/Reverb connection
+     * convention as video-processing and notifications. Driver-agnostic.
+     */
+    public static function publishRawEvent(string $username, string $event, array $data): void
+    {
+        try {
+            if (!SettingsServiceProvider::hasPusherSettings()) {
+                Log::error('Pusher keys missing, cannot publish '.$event);
+                return;
+            }
+
+            $options = (array) config('broadcasting.connections.pusher.options', []);
+
+            if (!array_key_exists('useTLS', $options)) {
+                $options['useTLS'] = (($options['scheme'] ?? 'http') === 'https');
+            }
+            if (isset($options['port'])) {
+                $options['port'] = (int) $options['port'];
+            }
+
+            $pusher = new Pusher(
+                config('broadcasting.connections.pusher.key'),
+                config('broadcasting.connections.pusher.secret'),
+                config('broadcasting.connections.pusher.app_id'),
+                $options
+            );
+
+            $pusher->trigger($username, $event, $data);
+        } catch (\Throwable $exception) {
+            Log::error('Pusher raw event exception: '.$exception->getMessage());
+        }
+    }
+
     public static function publishPushNotification($notification, $toUser): void
     {
         try {

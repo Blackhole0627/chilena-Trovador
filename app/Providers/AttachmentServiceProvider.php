@@ -266,7 +266,12 @@ class AttachmentServiceProvider extends ServiceProvider
 
         // Creating the db entry
         $storageDriver = config('filesystems.defaultFilesystemDriver');
-        return Attachment::create([
+
+        // Trovador T8 — only images and videos go through Rekognition; audio
+        // and regular files are never visually moderated.
+        $needsModeration = in_array($attachmentType, ['image', 'video'], true);
+
+        $attachment = Attachment::create([
             'id' => $fileId,
             'user_id' => $userId ?? Auth::id(),
             'filename' => $asset['filePath'],
@@ -277,7 +282,15 @@ class AttachmentServiceProvider extends ServiceProvider
             'has_blurred_preview' => $asset['hasBlurredPreview'] ? 1 : null,
             'blurred_filename' => $asset['blurredFilename'] ?? null,
             'length' => $asset['length'] ?? null,
+            'moderation_status' => $needsModeration ? 'processing' : 'not_applicable',
         ]);
+
+        // Dispatch async moderation; the user is notified in real time on result.
+        if ($needsModeration) {
+            \App\Jobs\ModerateAttachmentJob::dispatch((string) $attachment->id);
+        }
+
+        return $attachment;
     }
 
     protected static function normalizeAttachmentExtension(?string $extension, ?string $mimeType): string
