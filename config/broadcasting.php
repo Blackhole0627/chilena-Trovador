@@ -38,6 +38,11 @@ return [
             'logging' => env('PUSHER_APP_LOGGING', false),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
+                // Trovador: point at self-hosted Reverb when PUSHER_HOST is set
+                'host' => env('PUSHER_HOST') ?: null,
+                'port' => env('PUSHER_PORT') ?: null,
+                'scheme' => env('PUSHER_SCHEME', 'https'),
+                'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
                 'encrypted' => true,
             ],
         ],
