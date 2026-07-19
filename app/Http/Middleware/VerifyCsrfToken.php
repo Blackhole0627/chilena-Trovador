@@ -22,8 +22,8 @@ class VerifyCsrfToken extends Middleware
         // Active gateways for Trovador
         'payment/paypalStatusUpdate',
         'payment/mercadoPaymentStatusUpdate',
-        'transcoding/coconut/update',
-        // Unused gateways — left commented in case we enable them later
+        // Unused — left commented in case we enable them later
+        // 'transcoding/coconut/update', // using local FFmpeg, not Coconut
         // 'payment/stripeStatusUpdate',
         // 'payment/yookassaStatusUpdate',
         // 'payment/mollieStatusUpdate',
