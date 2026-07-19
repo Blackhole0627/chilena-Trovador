@@ -20,9 +20,11 @@ return [
     'enabled' => env('REKOGNITION_ENABLED', true),
 
     'credentials' => [
-        'key'    => env('AWS_ACCESS_KEY_ID'),
-        'secret' => env('AWS_SECRET_ACCESS_KEY'),
-        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+        // Dedicated Rekognition (real AWS) creds — decoupled from R2/S3 storage,
+        // which uses its own settings. Falls back to AWS_* if the dedicated vars are unset.
+        'key'    => env('REKOGNITION_KEY', env('AWS_ACCESS_KEY_ID')),
+        'secret' => env('REKOGNITION_SECRET', env('AWS_SECRET_ACCESS_KEY')),
+        'region' => env('REKOGNITION_REGION', env('AWS_DEFAULT_REGION', 'us-east-1')),
         'version' => env('REKOGNITION_API_VERSION', 'latest'),
     ],
 
