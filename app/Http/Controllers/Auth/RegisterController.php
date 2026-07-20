@@ -82,7 +82,9 @@ class RegisterController extends Controller
             'email' => $emailValidationRule,
             'password' => ['min:8', 'required', 'string', 'confirmed'],
             'password_confirmation' => ['required', 'min:8'],
-            'terms' => ['required'],
+            // Ley 21.719: explicit affirmative consent. 'accepted' requires the box
+            // to be actively ticked (yes/on/1/true) — stricter than 'required'.
+            'terms' => ['accepted'],
             ], $additionalRules)
         );
     }
