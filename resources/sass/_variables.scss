@@ -120,8 +120,8 @@ $theme-colors: map-merge(
 
 
 // Gradient colors
-$primary-gradient:            #7928CA !default;
-$primary-gradient-state:      #FF0080 !default;
+$primary-gradient:            #FF5A5F !default; // Trovador coral (was #7928CA)
+$primary-gradient-state:      #FF7A5F !default; // Trovador warm coral (was #FF0080)
 
 $secondary-gradient:          #627594 !default;
 $secondary-gradient-state:    #A8B8D8 !default;
