@@ -38,4 +38,8 @@ return [
         'webhook_url' => env('COCONUT_WEBHOOK_URL'),
     ],
 
+    'resend' => [
+        'key' => env('RESEND_KEY'),
+    ],
+
 ];
