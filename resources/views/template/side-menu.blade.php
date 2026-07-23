@@ -5,6 +5,11 @@
 @endphp
 
 <div class="side-menu px-1 px-md-2 px-lg-3 {{$isDarkTheme ? 'side-menu-theme-dark' : 'side-menu-theme-light'}}">
+    @if($brandLogo = ($isDarkTheme ? getSetting('site.dark_logo') : getSetting('site.light_logo')))
+        <a href="{{ url('/') }}" class="side-menu-brand d-flex align-items-center justify-content-center justify-content-lg-start mt-2 mb-4 px-2">
+            <img src="{{ $brandLogo }}" alt="{{ getSetting('site.name') }}" style="height:40px;width:auto;max-width:100%;object-fit:contain;">
+        </a>
+    @endif
     <div class="user-details mb-4 d-flex open-menu pointer-cursor flex-row-no-rtl">
         <div class="ml-0 ml-md-2">
             @if(Auth::check())
