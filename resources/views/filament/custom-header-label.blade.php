@@ -2,8 +2,7 @@
     <div class="version-badge">
         v{{ $version }}
         <div class="version-tooltip">
-            {{ str_rot13($label) }} {{ $license }}<br>
-            Build: v{{ $version }}
+            Trovador v{{ $version }}
         </div>
     </div>
 </div>
