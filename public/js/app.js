@@ -486,9 +486,62 @@ function shareOrCopyLink(url = false) {
             // eslint-disable-next-line no-console
             .catch(error => console.log('Error sharing:', error));
     } else {
-        copyToClipboard(url);
-        launchToast('success', trans('Success'), trans('Link copied to clipboard')+'.', 'now');
+        // no native share sheet (desktop): show a small menu with social options + copy
+        openShareFallbackMenu(url, document.title);
     }
+}
+
+/**
+ * Fallback share menu shown when the device has no native share sheet
+ * @param url
+ * @param title
+ */
+// eslint-disable-next-line no-unused-vars
+function openShareFallbackMenu(url, title) {
+    const existing = document.getElementById('share-fallback-overlay');
+    if (existing) { existing.remove(); }
+
+    const enc = encodeURIComponent(url);
+    const enct = encodeURIComponent(title || '');
+    const options = [
+        { label: 'WhatsApp', href: 'https://api.whatsapp.com/send?text=' + enct + '%20' + enc },
+        { label: 'Telegram', href: 'https://t.me/share/url?url=' + enc + '&text=' + enct },
+        { label: 'X', href: 'https://twitter.com/intent/tweet?url=' + enc + '&text=' + enct },
+        { label: 'Facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=' + enc },
+        { label: 'Email', href: 'mailto:?subject=' + enct + '&body=' + enc }
+    ];
+
+    const overlay = document.createElement('div');
+    overlay.id = 'share-fallback-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;';
+
+    let rows = options.map(o =>
+        '<a href="' + o.href + '" target="_blank" rel="noopener" ' +
+        'style="display:block;padding:12px 16px;border-radius:10px;background:#262422;color:#fff;text-decoration:none;margin-bottom:8px;font-weight:600;">' +
+        o.label + '</a>'
+    ).join('');
+    rows += '<button type="button" id="share-fallback-copy" ' +
+        'style="display:block;width:100%;padding:12px 16px;border:0;border-radius:10px;background:#FF5A5F;color:#fff;font-weight:700;cursor:pointer;">' +
+        trans('Copy link') + '</button>';
+
+    overlay.innerHTML =
+        '<div style="width:min(340px,90vw);background:#1E1C1A;border-radius:16px;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,.5);">' +
+        '<div style="color:#fff;font-weight:700;font-size:16px;margin-bottom:14px;">' + trans('Share') + '</div>' +
+        rows +
+        '</div>';
+
+    const close = () => overlay.remove();
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) { close(); } });
+    document.addEventListener('keydown', function esc(e) {
+        if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); }
+    });
+
+    document.body.appendChild(overlay);
+    overlay.querySelector('#share-fallback-copy').addEventListener('click', () => {
+        copyToClipboard(url);
+        launchToast('success', trans('Success'), trans('Link copied to clipboard') + '.', 'now');
+        close();
+    });
 }
 
 /**

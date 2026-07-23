@@ -86,6 +86,20 @@
     background: rgba($white, .1);
 }
 
+// Trovador: profile action buttons (Follow / View) should fill fully when clicked/active,
+// not just show an outlined border (overrides the transparent :not(.active) hover above).
+.manage-follow-button,
+.profile-media-view-button {
+    &:focus,
+    &:active,
+    &.active {
+        background-color: $primary !important;
+        border-color: $primary !important;
+        color: $white !important;
+        opacity: 1 !important;
+    }
+}
+
 @each $color, $value in $btn-font-colors {
     .btn.bg-gradient-#{$color} {
         color: $value;
