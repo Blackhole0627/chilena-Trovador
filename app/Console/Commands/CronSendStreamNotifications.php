@@ -22,9 +22,15 @@ class CronSendStreamNotifications extends Command
 
     protected $description = 'Send push reminders for scheduled live streams';
 
-    public function handle(WebPushService $webPush): int
+    public function handle(): int
     {
         Log::channel('cronjobs')->info('[*]['.date('H:i:s')."] Start scheduled stream reminders.\r\n");
+
+        // Web push is optional; if it isn't enabled, skip quietly instead of failing the cron.
+        if (!getSetting('profiles.push_notifications_enabled')) {
+            $this->info('Scheduled stream reminders skipped (web push disabled).');
+            return 0;
+        }
 
         $now = Carbon::now();
 
@@ -38,6 +44,18 @@ class CronSendStreamNotifications extends Command
                   ->orWhere('scheduled_notified_15m', false);
             })
             ->get();
+
+        if ($streams->isEmpty()) {
+            $this->info('Scheduled stream reminders done.');
+            return 0;
+        }
+
+        try {
+            $webPush = app(WebPushService::class);
+        } catch (\Throwable $e) {
+            $this->warn('Web push unavailable: '.$e->getMessage());
+            return 0;
+        }
 
         foreach ($streams as $stream) {
             $scheduledAt = Carbon::parse($stream->scheduled_at);
@@ -78,10 +96,15 @@ class CronSendStreamNotifications extends Command
             return;
         }
 
-        $webPush->sendToUsers($followerIds, [
-            'title' => $creator->name.' '.__('transmitirá en vivo').' '.$whenText,
-            'body'  => $stream->name ?: __('¡No te lo pierdas en Trovador!'),
-            'url'   => url('/live/'.$creator->username),
-        ]);
+        try {
+            $webPush->sendToUsers($followerIds, [
+                'title' => $creator->name.' '.__('transmitirá en vivo').' '.$whenText,
+                'body'  => $stream->name ?: __('¡No te lo pierdas en Trovador!'),
+                'url'   => url('/live/'.$creator->username),
+            ]);
+        } catch (\Throwable $e) {
+            // A single failed push shouldn't break the whole run.
+            Log::channel('cronjobs')->warning('Stream push failed: '.$e->getMessage());
+        }
     }
 }
