@@ -15,7 +15,9 @@
         body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#12110f;color:#fff;
             font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:24px;}
         .te-wrap{width:100%;max-width:520px;text-align:center;}
-        .te-img{width:min(300px,66vw);height:auto;margin:0 auto 4px;display:block;}
+        .te-img{width:min(340px,72vw);height:auto;margin:0 auto -8px;display:block;
+            -webkit-mask-image:radial-gradient(ellipse 70% 56% at 50% 50%,#000 52%,transparent 86%);
+            mask-image:radial-gradient(ellipse 70% 56% at 50% 50%,#000 52%,transparent 86%);}
         .te-code{font-size:clamp(56px,14vw,82px);font-weight:800;line-height:1;color:#FF5A5F;margin:0 0 10px;letter-spacing:-2px;}
         .te-title{font-size:clamp(20px,5vw,26px);font-weight:700;margin:0 0 10px;}
         .te-msg{font-size:16px;line-height:1.5;color:rgba(255,255,255,.72);margin:0 0 28px;}
