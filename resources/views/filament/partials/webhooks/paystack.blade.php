@@ -20,7 +20,7 @@
 
             <p class="text-sm mb-0">
                 Learn more in the
-                <a href="https://docs.qdev.tech/justfans/documentation.html#paystack"
+                <a href="##paystack"
                    class="underline text-inherit hover:opacity-80"
                    target="_blank"
                 >Paystack integration guide</a>.

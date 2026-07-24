@@ -14,7 +14,7 @@
         <div class="space-y-2">
             <p class="text-sm mb-0">
                 Learn more in the
-                <a href="https://docs.qdev.tech/justfans/documentation.html#mollie"
+                <a href="##mollie"
                    class="underline text-inherit hover:opacity-80"
                    target="_blank"
                 >Mollie integration guide</a>.

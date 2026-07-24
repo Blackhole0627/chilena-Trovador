@@ -26,7 +26,7 @@
 
             <p class="text-sm mb-0">
                 See the
-                <a href="https://docs.qdev.tech/justfans/documentation.html#crons"
+                <a href="##crons"
                    class="underline text-inherit hover:opacity-80"
                    target="_blank"
                 >cron setup guide</a>.

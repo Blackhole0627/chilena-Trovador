@@ -77,59 +77,16 @@ class ManageColorsSettings extends SettingsPage
         try {
             $state = $this->form->getState();
 
-            $payload = [
-                'product' => 'fans',
-                'skip_rtl' => !$this->includeRtlVersion,
-                'color_code' => ltrim($state['theme_color_code'], '#'),
-                'gradient_from' => ltrim($state['theme_gradient_from'], '#'),
-                'gradient_to' => ltrim($state['theme_gradient_to'], '#'),
-                'code' => getSetting('license.product_license_key'),
-            ];
+            // Trovador: theme generation via the external theme service has been
+            // removed. The theme is compiled locally from the custom SCSS palette, so
+            // this action no longer calls any external server.
+            unset($state);
 
-            $response = Http::timeout(300)->get('https://themes-v2.qdev.tech', $payload);
-            $json = $response->json();
-
-            if (!($json['success'] ?? false)) {
-                throw new \Exception($json['error'] ?? 'Theme generation failed.');
-            }
-
-            $themePath = $json['path'] ?? null;
-
-            if (!$themePath) {
-                throw new \Exception('Theme path missing from server response.');
-            }
-
-            if (extension_loaded('zip')) {
-                $themeFileUrl = "https://themes-v2.qdev.tech/{$themePath}";
-                $zipBinary = file_get_contents($themeFileUrl);
-
-                Storage::disk('local')->put('tmp/theme.zip', $zipBinary);
-                $zip = new \ZipArchive;
-
-                $zipPath = storage_path('app/tmp/theme.zip');
-                $extractPath = public_path('css/theme');
-
-                if ($zip->open($zipPath) === true) {
-                    File::ensureDirectoryExists($extractPath);
-                    $zip->extractTo($extractPath);
-                    $zip->close();
-                }
-
-                Storage::delete('tmp/theme.zip');
-
-                Notification::make()
-                    ->title('Theme generated & applied.')
-                    ->success()
-                    ->send();
-            } else {
-                $downloadUrl = "https://themes-v2.qdev.tech/{$themePath}";
-
-                Notification::make()
-                    ->title('Theme ready for download')
-                    ->body("Download from <a href=\"{$downloadUrl}\" class=\"underline\" target=\"_blank\">{$downloadUrl}</a>")
-                    ->success()
-                    ->send();
-            }
+            Notification::make()
+                ->title('Tema gestionado por el desarrollador')
+                ->body('Los colores de Trovador se compilan de forma personalizada. Para cambios de tema, contacta al desarrollador.')
+                ->success()
+                ->send();
         } catch (\Throwable $e) {
             Notification::make()
                 ->title('Theme generation failed')

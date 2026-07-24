@@ -23,7 +23,7 @@
 
             <p class="text-sm mb-0">
                 Learn more in the
-                <a href="https://docs.qdev.tech/justfans/documentation.html#nowpayments"
+                <a href="##nowpayments"
                    class="underline text-inherit hover:opacity-80"
                    target="_blank"
                 >NowPayments integration guide</a>.

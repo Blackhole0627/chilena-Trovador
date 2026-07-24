@@ -29,7 +29,7 @@
             </p>
             <p class="text-sm mb-0">
                 Learn more in the
-                <a href="https://docs.qdev.tech/justfans/documentation.html#paddle"
+                <a href="##paddle"
                    class="underline text-inherit hover:opacity-80"
                    target="_blank"
                 >Paddle integration guide</a>.

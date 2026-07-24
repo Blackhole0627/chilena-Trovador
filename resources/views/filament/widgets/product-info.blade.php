@@ -19,7 +19,7 @@
 
             {{-- Documentation --}}
             <div class="qs-card">
-                <a href="https://docs.qdev.tech/justfans/" target="_blank" class="qs-link">
+                <a href="#" target="_blank" class="qs-link">
                     <div class="qs-iconbox">
                         <x-heroicon-o-book-open />
                     </div>
@@ -32,7 +32,7 @@
 
             {{-- Changelog --}}
             <div class="qs-card">
-                <a href="https://changelogs.qdev.tech/products/fans" target="_blank" class="qs-link">
+                <a href="#" target="_blank" class="qs-link">
                     <div class="qs-iconbox">
                         <x-heroicon-o-document-text />
                     </div>

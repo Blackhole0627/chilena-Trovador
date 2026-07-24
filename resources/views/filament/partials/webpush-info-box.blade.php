@@ -18,7 +18,7 @@
 
             <p class="text-sm mb-1">
                 If generation does not work on this server, please check the
-                <a href="https://docs.qdev.tech/justfans/documentation.html#vapid-keys" target="_blank" class="text-primary">
+                <a href="##vapid-keys" target="_blank" class="text-primary">
                     documentation
                 </a>.
             </p>

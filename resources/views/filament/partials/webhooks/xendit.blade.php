@@ -23,7 +23,7 @@
             </p>
             <p class="text-sm mb-0">
                 Learn more in the
-                <a href="https://docs.qdev.tech/justfans/documentation.html#xendit"
+                <a href="##xendit"
                    class="underline text-inherit hover:opacity-80"
                    target="_blank"
                 >Xendit integration guide</a>.

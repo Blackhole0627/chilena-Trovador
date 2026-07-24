@@ -169,16 +169,16 @@ class InstallerController extends Controller
         ]);
 
         // Default email settings, otherwise log fails as well on L12 onwards
-        // Derive no-reply@<host> from $app_url, default to qdev.tech if invalid
+        // Derive no-reply@<host> from $app_url, default to trovadorapp.com if invalid
         $host = parse_url($app_url, PHP_URL_HOST) ?: parse_url("http://{$app_url}", PHP_URL_HOST);
         $host = $host ? preg_replace('/^www\./i', '', strtolower($host)) : null;
 
         $from = ($host && !filter_var($host, FILTER_VALIDATE_IP) && $host !== 'localhost')
             ? "no-reply@{$host}"
-            : "no-reply@qdev.tech";
+            : "no-reply@trovadorapp.com";
 
         if (!filter_var($from, FILTER_VALIDATE_EMAIL)) {
-            $from = "no-reply@qdev.tech";
+            $from = "no-reply@trovadorapp.com";
         }
 
         DB::table('settings')->updateOrInsert(
