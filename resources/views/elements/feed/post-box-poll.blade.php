@@ -3,7 +3,7 @@
         @if(!$votedAnswer)
             @foreach($post->poll->answers as $answer)
                 <div class="list-item p-1 border-bottom small">
-                    <a href="javscript:void(0)" class="list-link d-flex flex-column pt-2 pb-2 pl-3 rounded" onclick="Post.voteForPoll({{$post->poll->id}}, {{$answer->id}})">
+                    <a href="javascript:void(0)" class="list-link d-flex flex-column pt-2 pb-2 pl-3 rounded" onclick="Post.voteForPoll({{$post->poll->id}}, {{$answer->id}})">
                         {{$answer->answer}}
                     </a>
                 </div>
