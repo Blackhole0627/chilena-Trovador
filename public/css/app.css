@@ -1405,3 +1405,16 @@ html.home-navbar-scrolled .app-navbar-home.navbar-dark {
     object-fit: contain;
     display: block;
 }
+
+/* Trovador: contain horizontal overflow on mobile — the base layout let some
+   rows/content spill past the viewport, which showed as an uneven left/bottom margin.
+   Applied only at the mobile breakpoint (sticky desktop sidebars aren't rendered here). */
+@media (max-width: 767.98px) {
+    html, body {
+        overflow-x: clip;
+        max-width: 100vw;
+    }
+    .main-wrapper, .content-wrapper {
+        max-width: 100%;
+    }
+}
