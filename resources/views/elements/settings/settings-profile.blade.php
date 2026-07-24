@@ -6,7 +6,7 @@
 
 @if(!Auth::user()->email_verified_at) @include('elements.resend-verification-email-box') @endif
 
-<form method="POST" action="{{route('my.settings.profile.save',['type'=>'profile'])}}">
+<form method="POST" action="{{route('my.settings.profile.save',['type'=>'profile'])}}" enctype="multipart/form-data">
     @csrf
     @include('elements.dropzone-dummy-element')
     <div class="mb-4">
@@ -286,6 +286,24 @@
             </div>
         </div>
     @endif
+
+    {{-- F5 — welcome audio upload --}}
+    <div class="form-group">
+        <label for="welcome_audio">{{__('Welcome audio')}}</label>
+        <small class="form-text text-muted mb-2">{{__('Optional short clip visitors can play from your profile (max 10 MB).')}}</small>
+        @if(!empty(Auth::user()->welcome_audio))
+            <audio controls preload="none" class="mb-2 d-block" style="max-width:100%;"
+                   src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url(Auth::user()->welcome_audio) }}"></audio>
+            <div class="custom-control custom-checkbox mb-2">
+                <input type="checkbox" class="custom-control-input" id="remove_welcome_audio" name="remove_welcome_audio" value="true">
+                <label class="custom-control-label" for="remove_welcome_audio">{{__('Remove current audio')}}</label>
+            </div>
+        @endif
+        <input type="file" class="form-control-file {{ $errors->has('welcome_audio') ? 'is-invalid' : '' }}" id="welcome_audio" name="welcome_audio" accept="audio/*">
+        @if($errors->has('welcome_audio'))
+            <div class="invalid-feedback d-block"><strong>{{$errors->first('welcome_audio')}}</strong></div>
+        @endif
+    </div>
 
     <button class="btn btn-primary btn-block rounded mr-0" type="submit">{{__('Save')}}</button>
 </form>
