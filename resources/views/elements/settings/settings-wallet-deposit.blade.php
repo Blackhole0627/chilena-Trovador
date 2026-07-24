@@ -2,6 +2,15 @@
     $isDark = Cookie::get('app_theme') == 'dark' || (!Cookie::get('app_theme') && getSetting('site.default_user_theme') == 'dark');
     $depositPaymentMethods = [
         [
+            'enabled' => getSetting('payments.mercado_access_token'),
+            'id' => 'deposit-payment-mercado',
+            'value' => 'payment-mercado',
+            'name' => __('MercadoPago'),
+            'logo' => asset('/img/logos/mercado.svg'),
+            'type' => __('Cards & wallet'),
+            'note' => __('Regional card and wallet payments.'),
+        ],
+        [
             'enabled' => config('paypal.client_id') && config('paypal.secret'),
             'id' => 'deposit-payment-paypal',
             'value' => 'payment-paypal',
@@ -27,15 +36,6 @@
             'logo' => asset('/img/logos/nowpayments.svg'),
             'type' => __('Crypto'),
             'note' => __('Pay using supported cryptocurrencies.'),
-        ],
-        [
-            'enabled' => getSetting('payments.mercado_access_token'),
-            'id' => 'deposit-payment-mercado',
-            'value' => 'payment-mercado',
-            'name' => __('MercadoPago'),
-            'logo' => asset('/img/logos/mercado.svg'),
-            'type' => __('Cards & wallet'),
-            'note' => __('Regional card and wallet payments.'),
         ],
         [
             'enabled' => \App\Providers\PaymentsServiceProvider::ccbillCredentialsProvided(),

@@ -1390,3 +1390,18 @@ html.home-navbar-scrolled .app-navbar-home.navbar-dark {
         padding: 24px 0;
     }
 }
+
+/* Trovador: consistent, recognizable payment-provider logos on the deposit screen */
+.deposit-provider-logo{
+    width: 72px;
+    min-width: 72px;
+    height: 44px;
+}
+.deposit-provider-logo img{
+    max-width: 72px;
+    max-height: 40px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
