@@ -228,7 +228,7 @@
                 @endif
                 {{-- Comments (T7: hidden entirely when the creator disabled comments) --}}
                 @if(($post->comments_enabled ?? true) && Route::currentRouteName() != 'posts.get')
-                    @if($post->isSubbed || (Auth::check() && \App\Providers\ProfileMonetizationServiceProvider::userHasOpenProfile($post->user)))
+                    @if($post->isSubbed || (Auth::check() && ($post->user_id == Auth::id() || \App\Providers\ProfileMonetizationServiceProvider::userHasOpenProfile($post->user))))
                         <div class="h-pill h-pill-primary mr-1 rounded" data-toggle="tooltip" data-placement="top" title="{{__('Show comments')}}" onClick="Post.showPostComments({{$post->id}},6)">
                             @include('elements.icon',['icon'=>'chatbubble-outline', 'variant' => 'medium'])
                         </div>
