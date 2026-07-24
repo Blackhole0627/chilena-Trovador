@@ -12,7 +12,7 @@
     <style>
         *{box-sizing:border-box;}
         html,body{margin:0;padding:0;}
-        body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#141210;color:#fff;
+        body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#12110f;color:#fff;
             font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:24px;}
         .te-wrap{width:100%;max-width:520px;text-align:center;}
         .te-img{width:min(300px,66vw);height:auto;margin:0 auto 4px;display:block;}
