@@ -1406,39 +1406,26 @@ html.home-navbar-scrolled .app-navbar-home.navbar-dark {
     display: block;
 }
 
-/* Trovador: contain horizontal overflow on mobile — the base layout let some
-   rows/content spill past the viewport, which showed as an uneven left/bottom margin.
-   Applied only at the mobile breakpoint (sticky desktop sidebars aren't rendered here). */
+/* Trovador: make the content fill the full width on mobile — the base layout left
+   the content column with side borders + container padding, which showed as a black
+   margin/border on the sides and top. Contain overflow too. Mobile breakpoint only. */
 @media (max-width: 767.98px) {
     html, body {
         overflow-x: clip;
         max-width: 100vw;
+        margin: 0;
+        padding: 0;
+    }
+    .container-xl {
+        max-width: 100%;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
     .main-wrapper, .content-wrapper {
         max-width: 100%;
     }
-}
-
-/* Trovador: terracotta left sidebar (desktop) — accent-dominant look per client palette */
-.side-menu {
-    background: #FF5A5F;
-    color: #fff;
-    min-height: 100%;
-    border-radius: 0 18px 18px 0;
-    padding-top: 1rem;
-    padding-bottom: 1.5rem;
-}
-.side-menu .nav-link,
-.side-menu .nav-item i,
-.side-menu .user-details span,
-.side-menu .side-menu-brand {
-    color: #fff !important;
-}
-.side-menu .nav-link:hover,
-.side-menu .nav-item.active > .nav-link,
-.side-menu .nav-link.active,
-.side-menu li.active > .nav-link {
-    background: rgba(255,255,255,.18) !important;
-    color: #fff !important;
-    border-radius: 12px;
+    .content-wrapper {
+        border-left: 0 !important;
+        border-right: 0 !important;
+    }
 }

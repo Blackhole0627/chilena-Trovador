@@ -120,8 +120,8 @@ $theme-colors: map-merge(
 
 
 // Gradient colors
-$primary-gradient:            #FF5A5F !default; // Trovador coral (was #7928CA)
-$primary-gradient-state:      #CC3A3F !default; // Trovador deep terracotta (gradient end)
+$primary-gradient:            #CC3A3F !default; // Trovador coral (was #7928CA)
+$primary-gradient-state:      #FF7043 !default; // Trovador gradient to
 
 $secondary-gradient:          #627594 !default;
 $secondary-gradient-state:    #A8B8D8 !default;
@@ -162,7 +162,7 @@ $theme-gradient-colors: (
 // Settings for the `<body>` element.
 
 $body-bg:                   $white !default;
-$body-color:                #141210 !default; // Trovador — light-mode body text
+$body-color:                $font-color !default;
 $body-text-align:           null !default;
 
 // Set a specific jump point for requesting color jumps
