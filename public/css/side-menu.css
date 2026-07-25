@@ -26,7 +26,7 @@
     position: fixed;
     top: 0;
     left: -255px;
-    background: #141210;
+    background: #FF5A5F;
     color: #fff;
     transition: all .3s;
     box-shadow: 2px 0px 3px rgba(170 170 170, 0.5);
@@ -42,10 +42,10 @@
 
 .dismiss {
 	width: 35px; height: 35px; position: absolute; top: 10px; right: 10px; transition: all .3s;
-	background: #262422; border-radius: 4px; text-align: center; line-height: 35px; cursor: pointer;
+	background: rgba(255,255,255,.18); border-radius: 4px; text-align: center; line-height: 35px; cursor: pointer;
 }
 
-.dismiss:hover, .dismiss:focus { background: #3a3634; color: #fff; }
+.dismiss:hover, .dismiss:focus { background: rgba(255,255,255,.28); color: #fff; }
 
 .sidebar .logo { padding: 40px 20px; border-bottom: 1px solid #444; transition: all .3s; }
 
@@ -70,18 +70,18 @@
 .sidebar ul li a:hover,
 .sidebar ul li a:focus,
 .sidebar ul li.active > a:hover,
-.sidebar ul li.active > a:focus { outline: 0; background: #262422; color: #fff; }
+.sidebar ul li.active > a:focus { outline: 0; background: rgba(255,255,255,.18); color: #fff; }
 
 .sidebar ul li a i { margin-right: 5px; }
 
 .sidebar ul li.active > a, .sidebar ul li.active > a[aria-expanded="true"] {
-	background: #262422;
+	background: rgba(255,255,255,.18);
 	color: #fff;
 }
 
-.sidebar ul ul a { background: #1E1C1A; padding-left: 30px; font-size: 14px; }
+.sidebar ul ul a { background: rgba(255,255,255,.12); padding-left: 30px; font-size: 14px; }
 
-.sidebar ul ul li.active > a { background: #262422; }
+.sidebar ul ul li.active > a { background: rgba(255,255,255,.18); }
 
 .sidebar a[data-toggle="collapse"] {
     position: relative;

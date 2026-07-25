@@ -1418,3 +1418,27 @@ html.home-navbar-scrolled .app-navbar-home.navbar-dark {
         max-width: 100%;
     }
 }
+
+/* Trovador: terracotta left sidebar (desktop) — accent-dominant look per client palette */
+.side-menu {
+    background: #FF5A5F;
+    color: #fff;
+    min-height: 100%;
+    border-radius: 0 18px 18px 0;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+}
+.side-menu .nav-link,
+.side-menu .nav-item i,
+.side-menu .user-details span,
+.side-menu .side-menu-brand {
+    color: #fff !important;
+}
+.side-menu .nav-link:hover,
+.side-menu .nav-item.active > .nav-link,
+.side-menu .nav-link.active,
+.side-menu li.active > .nav-link {
+    background: rgba(255,255,255,.18) !important;
+    color: #fff !important;
+    border-radius: 12px;
+}
