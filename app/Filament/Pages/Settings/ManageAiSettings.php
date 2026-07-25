@@ -8,6 +8,7 @@ use BackedEnum;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Tabs;
@@ -200,6 +201,26 @@ class ManageAiSettings extends SettingsPage
                                 ->step(1)
                                 ->required()
                                 ->helperText('Between this and the reject threshold, content is flagged for human review. Below it, auto-approved.'),
+
+                            Textarea::make('moderation_msg_approved')
+                                ->label('Mensaje: aprobado')
+                                ->rows(2)
+                                ->columnSpanFull(),
+
+                            Textarea::make('moderation_msg_pending')
+                                ->label('Mensaje: en revisión')
+                                ->rows(2)
+                                ->columnSpanFull(),
+
+                            Textarea::make('moderation_msg_rejected')
+                                ->label('Mensaje: rechazado')
+                                ->rows(3)
+                                ->columnSpanFull(),
+
+                            Textarea::make('moderation_msg_failed')
+                                ->label('Mensaje: error de procesamiento')
+                                ->rows(2)
+                                ->columnSpanFull(),
                         ]),
                 ]),
         ]);

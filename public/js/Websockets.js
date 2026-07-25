@@ -183,13 +183,41 @@ var Websockets = {
 
         // Trovador T8 — real-time Rekognition moderation result for own uploads.
         channel.bind('attachment-moderated', function (data) {
-            var type = 'success';
-            if (data.status === 'pending_review') {
-                type = 'warning';
-            } else if (data.status === 'rejected' || data.status === 'failed') {
-                type = 'danger';
+            if (typeof window.showModerationErrorDialog !== 'function') {
+                // Branded processing-error dialog (matches the error pages, theme-aware).
+                window.showModerationErrorDialog = function (message) {
+                    var existing = document.getElementById('moderation-error-overlay');
+                    if (existing) { existing.remove(); }
+                    var isLight = /(^|;\s*)app_theme=light/.test(document.cookie);
+                    var img = isLight ? '/img/error-plug-light.png' : '/img/error-plug.png';
+                    var bg = isLight ? '#fefefe' : '#12110f';
+                    var msgColor = isLight ? 'rgba(20,18,16,.72)' : 'rgba(255,255,255,.75)';
+                    var overlay = document.createElement('div');
+                    overlay.id = 'moderation-error-overlay';
+                    overlay.style.cssText = 'position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:24px;';
+                    overlay.innerHTML = '<div style="max-width:360px;width:100%;text-align:center;background:' + bg + ';border-radius:18px;padding:24px;">' +
+                        '<img src="' + img + '" alt="" style="width:220px;max-width:72%;height:auto;margin:0 auto 6px;display:block;-webkit-mask-image:radial-gradient(ellipse 70% 56% at 50% 50%,#000 52%,transparent 86%);mask-image:radial-gradient(ellipse 70% 56% at 50% 50%,#000 52%,transparent 86%);">' +
+                        '<p style="color:' + msgColor + ';font-size:15px;line-height:1.5;margin:0 0 20px;">' + message + '</p>' +
+                        '<button type="button" style="padding:12px 30px;border:0;border-radius:12px;background:#E2725B;color:#fff;font-weight:700;font-size:15px;cursor:pointer;">Entendido</button>' +
+                        '</div>';
+                    overlay.addEventListener('click', function (e) {
+                        if (e.target === overlay || e.target.tagName === 'BUTTON') { overlay.remove(); }
+                    });
+                    document.body.appendChild(overlay);
+                };
             }
-            launchToast(type, trans('Moderación de contenido'), filterXSS(data.message));
+
+            if (data.status === 'failed') {
+                window.showModerationErrorDialog(filterXSS(data.message));
+            } else {
+                var type = 'success';
+                if (data.status === 'pending_review') {
+                    type = 'warning';
+                } else if (data.status === 'rejected') {
+                    type = 'danger';
+                }
+                launchToast(type, trans('Moderación de contenido'), filterXSS(data.message));
+            }
 
             // If a rejected/failed attachment is still shown in an open uploader,
             // drop its preview so the user cannot publish it.

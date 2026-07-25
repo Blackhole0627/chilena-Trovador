@@ -61,6 +61,15 @@ class AISettings extends Settings
 
     public bool $moderation_notify_user = true;
 
+    // Trovador — admin-editable moderation notification messages (shown to the uploader).
+    public string $moderation_msg_approved = 'Tu contenido fue aprobado y ya está visible. ¡Gracias por ser parte de Trovador!';
+
+    public string $moderation_msg_pending = 'Tu contenido está siendo revisado por nuestro equipo. Te notificaremos pronto.';
+
+    public string $moderation_msg_rejected = 'Tu contenido no cumple con nuestras políticas. En Trovador celebramos la sensualidad y la creatividad — pero sin contenido explícito. Revisa nuestras normas e inténtalo de nuevo.';
+
+    public string $moderation_msg_failed = 'No pudimos procesar este archivo. Inténtalo de nuevo o escríbenos a contacto@trovadorapp.com';
+
     public static function group(): string
     {
         return 'ai';

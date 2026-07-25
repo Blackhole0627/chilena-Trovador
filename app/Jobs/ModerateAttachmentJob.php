@@ -99,11 +99,13 @@ class ModerateAttachmentJob implements ShouldQueue
             return;
         }
 
+        // Admin-editable messages (Filament → Settings → AI). Fall back to defaults if unset.
+        $s = app(AISettings::class);
         $messages = [
-            'approved'       => __('Tu contenido fue publicado correctamente.'),
-            'pending_review' => __('Tu contenido está siendo revisado por nuestro equipo. Te avisaremos en breve.'),
-            'rejected'       => __('Tu contenido no cumple con nuestras políticas y no fue publicado.'),
-            'failed'         => __('No pudimos procesar este archivo. Inténtalo de nuevo o contacta a soporte.'),
+            'approved'       => $s->moderation_msg_approved ?: __('Tu contenido fue publicado correctamente.'),
+            'pending_review' => $s->moderation_msg_pending ?: __('Tu contenido está siendo revisado por nuestro equipo. Te avisaremos en breve.'),
+            'rejected'       => $s->moderation_msg_rejected ?: __('Tu contenido no cumple con nuestras políticas y no fue publicado.'),
+            'failed'         => $s->moderation_msg_failed ?: __('No pudimos procesar este archivo. Inténtalo de nuevo o contacta a soporte.'),
         ];
 
         // Publish on the user's private channel (named by username), the same
